@@ -5,6 +5,7 @@
 ## 필요값
 
 - `API_URL=https://운영-api-domain`
+- 참고 파일: `.env.production.example`
 
 ## 배포 순서
 
@@ -21,4 +22,3 @@ npm run start
 - 랭킹 5~10명 표시
 - 글자 잘림/겹침/불필요한 스크롤 없음
 - 앱 공부시간 변경 후 랭킹 반영
-
