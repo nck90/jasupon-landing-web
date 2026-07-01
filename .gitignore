@@ -5,6 +5,7 @@ coverage/
 .vercel/
 .env
 .env.*
+!.env.production.example
 *.log
 .DS_Store
 .omc/
