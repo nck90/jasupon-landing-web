@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   getRankings,
   getStatus,
@@ -66,9 +73,10 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    void refresh();
+    const initialRefresh = window.setTimeout(() => void refresh(), 0);
     const poll = window.setInterval(() => void refresh(), 15_000);
     return () => {
+      window.clearTimeout(initialRefresh);
       window.clearInterval(poll);
     };
   }, [refresh]);
@@ -328,9 +336,56 @@ function RaceArena({ items }: { items: RankingItem[] }) {
           seatNo: item.seatNo,
         }))
       : demoRaceEntries;
+  const laneRefs = useRef(new Map<string, HTMLLIElement>());
+  const previousRectsRef = useRef(new Map<string, DOMRect>());
+  const previousRanksRef = useRef(new Map<string, number>());
   const leaderScore = Math.max(1, entries[0]?.score ?? 0);
   const visibleCount = entries.length;
   const runnerUpGap = Math.max(0, leaderScore - (entries[1]?.score ?? leaderScore));
+
+  useLayoutEffect(() => {
+    const previousRects = previousRectsRef.current;
+    const nextRects = new Map<string, DOMRect>();
+
+    entries.forEach((entry) => {
+      const node = laneRefs.current.get(entry.id);
+      if (!node) return;
+      const nextRect = node.getBoundingClientRect();
+      const previousRect = previousRects.get(entry.id);
+      const previousRank = previousRanksRef.current.get(entry.id);
+      nextRects.set(entry.id, nextRect);
+
+      node.classList.remove("lane-rank-up", "lane-rank-down");
+      if (previousRank !== undefined && previousRank !== entry.rankNo) {
+        node.classList.add(
+          previousRank > entry.rankNo ? "lane-rank-up" : "lane-rank-down",
+        );
+        window.setTimeout(() => {
+          node.classList.remove("lane-rank-up", "lane-rank-down");
+        }, 1200);
+      }
+
+      if (!previousRect) return;
+      const deltaX = previousRect.left - nextRect.left;
+      const deltaY = previousRect.top - nextRect.top;
+      if (Math.abs(deltaX) < 1 && Math.abs(deltaY) < 1) return;
+
+      node.style.transition = "none";
+      node.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+      node.style.zIndex = deltaY > 0 ? "6" : "5";
+
+      window.requestAnimationFrame(() => {
+        node.style.transition =
+          "transform 820ms cubic-bezier(0.18, 0.9, 0.24, 1)";
+        node.style.transform = "translate(0, 0)";
+      });
+    });
+
+    previousRectsRef.current = nextRects;
+    previousRanksRef.current = new Map(
+      entries.map((entry) => [entry.id, entry.rankNo]),
+    );
+  }, [entries]);
 
   return (
     <div className={items.length > 0 ? "race-arena" : "race-arena is-demo"}>
@@ -355,6 +410,10 @@ function RaceArena({ items }: { items: RankingItem[] }) {
           return (
             <li
               key={item.id}
+              ref={(node) => {
+                if (node) laneRefs.current.set(item.id, node);
+                else laneRefs.current.delete(item.id);
+              }}
               className={`${item.rankNo === 1 ? "lane-leader" : ""} ${item.isDemo ? "lane-demo" : ""}`}
             >
               <div className="lane-meta">
