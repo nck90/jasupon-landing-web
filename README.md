@@ -1,6 +1,6 @@
-# STUDYON HOT-습 TV Display Web
+# STUDYON 자습ON TV Display Web
 
-진수학 HOT-습 챌린지 전자칠판용 Next.js 16 앱이다. 학원 TV에서 커밍순 포스터, 실시간 공부시간 레이스, 혜택 보드를 PPT 슬라이드처럼 자동 순환 표시한다.
+자습ON 자습ON 자습실 관리 전자칠판용 Next.js 16 앱이다. 학원 TV에서 커밍순 포스터, 실시간 공부시간 레이스, 혜택 보드를 PPT 슬라이드처럼 자동 순환 표시한다.
 
 ## Local run
 

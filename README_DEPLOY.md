@@ -1,4 +1,4 @@
-# 진수학 HOT-습 챌린지 TV Display Web
+# 자습ON 자습ON 자습실 관리 TV Display Web
 
 전자칠판 랭킹 화면 배포용 레포입니다.
 
