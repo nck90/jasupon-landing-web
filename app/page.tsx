@@ -1,216 +1,556 @@
-"use client";
+import ContactForm from "./contact-form";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  getRankings,
-  getStatus,
-  type DisplayStatus,
-  type RankingItem,
-} from "@/lib/api";
+const img = (name: string) => `/smarthb-assets/original/${name}`;
+const gen = (name: string) => `/studyon-generated/${name}`;
+const asset = (name: string) =>
+  name.startsWith("feature-") || name.startsWith("hero-") || name.startsWith("workflow-") ? gen(name) : img(name);
 
-const slides = ["status", "ranking", "notice"] as const;
+const nav = ["자습ON", "운영시스템", "기능소개", "도입문의", "활용사례", "공지사항"];
 
-function formatMinutes(minutes: number) {
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-  if (h <= 0) return `${m}분`;
-  return `${h}시간 ${m}분`;
-}
+const techStats = [
+  {
+    eyebrow: "Problem",
+    title: "매일 반복되는 확인 업무",
+    value: "출석·좌석",
+    body: "누가 왔고 어디 앉았는지 계속 확인",
+    note: "자습실은 있어도 출석, 좌석, 이탈 학생을 사람이 계속 챙기면 운영 부담이 줄지 않습니다.",
+  },
+  {
+    eyebrow: "Cost",
+    title: "보이지 않는 인건비",
+    value: "조교 시간",
+    body: "작아 보여도 매일 누적되는 관리 비용",
+    note: "출석 체크, 지각 확인, 랭킹 정리, 쿠폰 지급이 반복되면 조교 1명의 시간을 계속 잡아먹습니다.",
+  },
+  {
+    eyebrow: "Solution",
+    title: "시스템으로 대체",
+    value: "자습ON",
+    body: "사람이 지켜보던 관리를 자동화",
+    note: "학생 입력, 관리자 화면, 전자칠판을 연결해 사람이 계속 붙어 있어야 했던 업무를 줄입니다.",
+  },
+];
 
-function studentName(item: RankingItem) {
-  return item.name || "학생";
-}
+const systemSteps = [
+  {
+    no: "01",
+    title: "출석 확인 자동화",
+    subtitle: "입실·퇴실·지각·미입실 상태 확인",
+    body: "누가 왔고 안 왔는지 조교가 수기로 확인하지 않아도 관리자 화면에서 바로 봅니다.",
+    image: "feature-attendance.png",
+    tab: "sec5_step01_on.png",
+  },
+  {
+    no: "02",
+    title: "좌석 관리 자동화",
+    subtitle: "배정 좌석·빈 좌석·이탈 학생 파악",
+    body: "자리 배정과 사용 현황을 시스템으로 남겨 자습실을 돌아다니며 확인하는 시간을 줄입니다.",
+    image: "feature-seat.png",
+    tab: "sec5_step02_on.png",
+  },
+  {
+    no: "03",
+    title: "공부시간 기록",
+    subtitle: "공부 타이머·누적 시간·목표 미달 확인",
+    body: "앉아 있는 시간과 공부 기록을 구분해 관리가 필요한 학생을 더 빠르게 찾습니다.",
+    image: "feature-records.png",
+    tab: "sec5_step03_on.png",
+  },
+  {
+    no: "04",
+    title: "랭킹·보상 운영",
+    subtitle: "공부시간 랭킹·챌린지·쿠폰 대상자",
+    body: "엑셀로 정리하던 이벤트와 보상 기준을 데이터 기반으로 운영할 수 있습니다.",
+    image: "feature-ranking.png",
+    tab: "sec5_step04_on.png",
+  },
+];
+
+const mathLevels = [
+  {
+    id: "math1",
+    label: "출결 자동화",
+    kicker: "조교가 계속 체크하던 출석 확인을",
+    title: "온 학생과 안 온 학생을 바로 구분합니다",
+    variant: "plain",
+    points: ["입실·퇴실 상태 자동 기록", "지각·미입실 학생 빠른 확인", "관리 필요한 학생 누락 감소"],
+    slides: [],
+    boxes: [],
+    desc: "입실, 퇴실, 지각, 미입실 상태가 기록되면 관리 필요한 학생을 놓치지 않습니다.",
+  },
+  {
+    id: "math2",
+    label: "좌석 운영",
+    kicker: "좌석 배정과 자리 이탈 확인까지",
+    title: "자습실을 돌아다니며 확인하는 시간을 줄입니다",
+    variant: "plain",
+    points: ["배정 좌석과 빈 좌석 확인", "학생별 좌석 이용 이력 관리", "데스크 응대 기준 단순화"],
+    slides: [],
+    boxes: [],
+    desc: "배정 좌석, 빈 좌석, 이용 이력을 한 화면에서 확인해 데스크 대응을 단순화합니다.",
+  },
+  {
+    id: "math3",
+    label: "공부시간 리포트",
+    kicker: "앉아 있는 시간보다 중요한 것은",
+    title: "실제 공부시간이 데이터로 남는 것입니다",
+    variant: "plain",
+    points: ["과목별 공부 타이머 기록", "학생별 누적 공부시간 확인", "목표 미달 학생과 성실 학생 구분"],
+    slides: [],
+    boxes: [],
+    desc: "과목별 타이머와 누적 기록으로 목표 미달 학생과 성실한 학생을 빠르게 구분합니다.",
+  },
+  {
+    id: "mathAdd",
+    label: "운영 확장",
+    kicker: "학원이 커질수록 더 필요한 것은",
+    title: "사람마다 달라지지 않는 운영 기준입니다",
+    variant: "plain",
+    points: ["출석·좌석 기준을 한 화면 기준으로 통일", "조교별 확인 방식 차이 감소", "원장님이 보는 운영 지표와 현장 대응 기준 일치"],
+    slides: [],
+    boxes: [],
+    desc: "원장님, 조교, 선생님이 같은 데이터를 보고 출석·좌석·공부시간 기준을 맞춥니다.",
+  },
+];
+
+const englishLevels = [
+  {
+    id: "en1",
+    label: "학부모 알림",
+    kicker: "학부모 문의에 감으로 답하지 않도록",
+    title: "보여줄 수 있는 자습 기록을 만듭니다",
+    variant: "plain",
+    points: ["입실·퇴실·결석 이력 확인", "학생별 공부시간 기록 축적", "상담 전 바로 확인 가능한 관리 근거 확보"],
+    slides: [],
+    boxes: [],
+    desc: "입실, 퇴실, 결석, 공부시간 기록이 쌓이면 상담 근거가 선명해집니다.",
+  },
+  {
+    id: "en2",
+    label: "운영 가이드",
+    kicker: "학생이 직접 기록하고 관리자는 확인",
+    title: "확인 업무를 학생 입력과 시스템으로 분산합니다",
+    variant: "plain",
+    points: ["학생은 입실·계획·타이머·퇴실을 직접 기록", "관리자는 누락·지각·목표 미달 학생만 확인", "반복 확인 업무를 학생 흐름과 관리자 화면으로 분산"],
+    slides: [],
+    boxes: [],
+    desc: "로그인, 입실, 공부계획, 타이머, 퇴실 흐름이 남기 때문에 계속 지켜볼 필요가 줄어듭니다.",
+  },
+  {
+    id: "en3",
+    label: "상담 기록",
+    kicker: "원장님이 매번 직접 확인하지 않아도",
+    title: "지금 누가 있고 누가 관리 필요한지 보입니다",
+    variant: "plain",
+    points: ["현재 입실·미입실·지각 학생 구분", "목표 미달 학생 확인", "좌석 배정과 해지 이력 확인"],
+    slides: [],
+    boxes: [],
+    desc: "현재 입실 학생, 미입실 학생, 지각 학생, 목표 미달 학생을 한 화면에서 확인합니다.",
+  },
+  {
+    id: "enAdd",
+    label: "관리자 팁",
+    kicker: "랭킹과 보상도 사람이 매번 정리하지 않게",
+    title: "공부시간과 출석 데이터로 자동 운영합니다",
+    variant: "plain",
+    points: ["공부시간 랭킹 기준 자동화", "출석 챌린지와 쿠폰 대상자 관리", "엑셀 정리 없이 보상 운영 기준 유지"],
+    slides: [],
+    boxes: [],
+    desc: "랭킹, 챌린지, 쿠폰, 보상 대상자를 데이터 기준으로 관리해 이벤트 운영을 가볍게 만듭니다.",
+  },
+];
+
+const teacherTabs = [
+  {
+    title: "관리 인력 감소",
+    body: "출석, 좌석, 지각·결석 상태를 한 화면에서 확인해 조교가 계속 붙어 있어야 하는 시간을 줄입니다.",
+    points: ["입실·퇴실 확인", "미입실 학생 확인", "좌석 이탈 확인"],
+  },
+  {
+    title: "원장 부담 감소",
+    body: "자습실을 계속 돌아다니지 않아도 지금 누가 있고, 누가 공부했고, 누가 관리 필요한지 확인합니다.",
+    points: ["현재 입실 현황", "좌석 사용 현황", "목표 미달 학생"],
+  },
+  {
+    title: "상담 근거 확보",
+    body: "공부시간과 출석 데이터가 남아 학부모 상담 때 보여줄 수 있는 관리 근거가 생깁니다.",
+    points: ["공부시간 기록", "출결 이력", "랭킹·보상 이력"],
+  },
+];
 
 export default function Home() {
-  const [rankings, setRankings] = useState<RankingItem[]>([]);
-  const [status, setStatus] = useState<DisplayStatus | null>(null);
-  const [lastUpdatedAt, setLastUpdatedAt] = useState<Date | null>(null);
-  const [offline, setOffline] = useState(false);
-  const [slide, setSlide] = useState(0);
-
-  const refresh = useCallback(async () => {
-    try {
-      const [nextRankings, nextStatus] = await Promise.all([
-        getRankings(),
-        getStatus(),
-      ]);
-      setRankings(nextRankings);
-      setStatus(nextStatus);
-      setLastUpdatedAt(new Date());
-      setOffline(false);
-    } catch (error) {
-      console.warn("TV display refresh failed", error);
-      setOffline(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    void refresh();
-    const poll = window.setInterval(() => void refresh(), 15_000);
-    return () => window.clearInterval(poll);
-  }, [refresh]);
-
-  useEffect(() => {
-    const timer = window.setInterval(
-      () => setSlide((value) => (value + 1) % slides.length),
-      12_000,
-    );
-    return () => window.clearInterval(timer);
-  }, []);
-
-  const topRankings = useMemo(() => rankings.slice(0, 8), [rankings]);
-  const activeSlide = slides[slide];
-
   return (
-    <main className="min-h-screen bg-[#f7fbff] text-[#14213d]">
-      <div className="mx-auto flex min-h-screen max-w-[1440px] flex-col px-12 py-10">
-        <header className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <img
-              src="/jasupon_logo.png"
-              alt="자습ON"
-              className="h-16 w-16 rounded-2xl bg-white object-contain shadow-sm"
-            />
-            <div>
-              <p className="text-5xl font-black tracking-tight">자습ON</p>
-              <p className="mt-1 text-xl font-bold text-[#527085]">
-                오늘의 자습실 현황
-              </p>
-            </div>
-          </div>
-          <div className="rounded-2xl bg-white px-5 py-3 text-right shadow-sm">
-            <p className="text-sm font-bold text-[#6c7f90]">업데이트</p>
-            <p className="text-2xl font-black">
-              {lastUpdatedAt
-                ? lastUpdatedAt.toLocaleTimeString("ko-KR", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })
-                : "--:--"}
-            </p>
-          </div>
-        </header>
-
-        <section className="mt-10 flex flex-1 items-stretch">
-          {activeSlide === "status" && (
-            <div className="grid flex-1 grid-cols-2 gap-6">
-              <Metric
-                label="입실 학생"
-                value={`${status?.checkedInCount ?? 0}명`}
-                tone="teal"
-              />
-              <Metric
-                label="좌석 점유율"
-                value={`${Math.round(status?.seatOccupancyRate ?? 0)}%`}
-                tone="blue"
-              />
-              <Metric
-                label="현재 공부 중"
-                value={formatMinutes(status?.liveStudyMinutes ?? 0)}
-                tone="yellow"
-              />
-              <Metric
-                label="오늘 누적 공부"
-                value={formatMinutes(status?.todayTotalStudyMinutes ?? 0)}
-                tone="navy"
-              />
-            </div>
-          )}
-
-          {activeSlide === "ranking" && (
-            <div className="flex-1 rounded-[32px] bg-white p-8 shadow-sm">
-              <div className="mb-6 flex items-end justify-between">
-                <div>
-                  <p className="text-xl font-black text-[#20bfa9]">
-                    공부시간 랭킹
-                  </p>
-                  <h1 className="text-5xl font-black tracking-tight">
-                    오늘 가장 집중한 학생
-                  </h1>
-                </div>
-                <p className="text-lg font-bold text-[#6c7f90]">
-                  공부시간 기준으로 표시됩니다
-                </p>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                {topRankings.map((item) => (
-                  <div
-                    key={item.studentId}
-                    className="flex items-center gap-5 rounded-3xl border border-[#e6eef5] bg-[#f9fcff] px-6 py-5"
-                  >
-                    <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#20bfa9] text-2xl font-black text-white">
-                      {item.rankNo}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-2xl font-black">
-                        {studentName(item)}
-                      </p>
-                      <p className="text-base font-bold text-[#6c7f90]">
-                        {item.seatNo ? `좌석 ${item.seatNo}` : "좌석 미배정"}
-                      </p>
-                    </div>
-                    <p className="text-2xl font-black text-[#1b75ff]">
-                      {formatMinutes(item.totalStudyMinutes)}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {activeSlide === "notice" && (
-            <div className="flex flex-1 flex-col justify-center rounded-[32px] bg-white p-12 text-center shadow-sm">
-              <p className="text-2xl font-black text-[#20bfa9]">자습ON 안내</p>
-              <h1 className="mt-4 text-6xl font-black leading-tight">
-                입실, 좌석, 계획, 타이머를
-                <br />
-                한 화면에서 관리합니다
-              </h1>
-              <p className="mx-auto mt-8 max-w-3xl text-2xl font-bold leading-relaxed text-[#527085]">
-                오늘의 공부 계획을 세우고 타이머로 기록하세요. 출석과 공부시간은
-                관리자 화면에 자동으로 반영됩니다.
-              </p>
-            </div>
-          )}
-        </section>
-
-        <footer className="mt-8 flex items-center justify-between text-lg font-bold text-[#6c7f90]">
-          <span>{offline ? "서버 연결 확인 중" : "실시간 동기화 중"}</span>
-          <div className="flex gap-2">
-            {slides.map((item, index) => (
-              <span
-                key={item}
-                className={`h-3 w-10 rounded-full ${
-                  index === slide ? "bg-[#20bfa9]" : "bg-[#dbe8f3]"
-                }`}
-              />
-            ))}
-          </div>
-        </footer>
-      </div>
+    <main className="smarthb smarthb-long">
+      <Header />
+      <Hero />
+      <DataSection />
+      <TeacherIntro />
+      <BridgeSection />
+      <LineBanner theme="blue">사람이 매번 확인하던 자습실 관리를 시스템으로 줄입니다</LineBanner>
+      <SystemSection />
+      <CoursewareSection />
+      <LineBanner theme="teacher">조교와 원장님의 반복 확인 업무를 줄이는 자습ON</LineBanner>
+      <TeacherDetail />
+      <ReviewSection />
+      <FinalCta />
+      <Footer />
+      <BottomTrialBanner />
+      <ContactForm />
     </main>
   );
 }
 
-function Metric({
-  label,
-  value,
-  tone,
-}: {
-  label: string;
-  value: string;
-  tone: "teal" | "blue" | "yellow" | "navy";
-}) {
-  const colors = {
-    teal: "bg-[#e9fbf8] text-[#109b8c]",
-    blue: "bg-[#eaf3ff] text-[#1b75ff]",
-    yellow: "bg-[#fff8df] text-[#d99600]",
-    navy: "bg-[#edf1f7] text-[#14213d]",
-  }[tone];
+function Header() {
   return (
-    <div className={`flex flex-col justify-between rounded-[32px] p-8 ${colors}`}>
-      <p className="text-2xl font-black">{label}</p>
-      <p className="text-7xl font-black tracking-tight">{value}</p>
+    <header className="hb-header">
+      <div className="hb-wide hb-header-inner">
+        <a className="hb-logo-img" href="#">
+          <img src="/studyon-assets/jasupon_wordmark.png" alt="자습ON" />
+        </a>
+        <nav>
+          {nav.map((item) => (
+            <a className={item === "자습ON" ? "active" : ""} href="#" key={item}>
+              {item}
+            </a>
+          ))}
+        </nav>
+      </div>
+    </header>
+  );
+}
+
+function Hero() {
+  return (
+    <section className="section-hero">
+      <div className="hb-wide hero-layout">
+        <div className="hero-copy">
+          <p>자습실, 아직도 사람이 직접 관리하고 있나요?</p>
+          <h1>
+            출석·좌석·공부시간·랭킹·보상까지
+            <br />
+            한 번에 관리하는 자습실 운영 시스템
+          </h1>
+          <strong>자습ON</strong>
+          <em className="hero-price">학생 1인 월 9,900원</em>
+        </div>
+        <div className="hero-images">
+          <img className="studyon-hero-mockup" src={gen("hero-device-mockup-v2.png")} alt="자습ON 학생 앱과 관리자 웹 화면" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function DataSection() {
+  return (
+    <section className="section-data long-section">
+      <div className="hb-wide">
+          <TitleBlock eyebrow="메인 문제" title={<>자습실은 있는데,<br />관리하려면 사람이 필요합니다</>} />
+        <div className="phone-composition">
+          <img className="phone left" src={gen("feature-attendance-seat-v2.png")} alt="자습ON 출석 관리 화면" />
+          <img className="phone center" src={gen("feature-record-ranking-v2.png")} alt="자습ON 공부 기록 화면" />
+          <img className="phone right" src={gen("workflow-strip-v2.png")} alt="자습ON 운영 자동화 흐름" />
+        </div>
+        <div className="stat-row">
+          {techStats.map((stat) => (
+            <article key={stat.title} className="big-stat">
+              <span>{stat.eyebrow}</span>
+              <p>{stat.title}</p>
+              <strong>{stat.value}</strong>
+              <em>{stat.body}</em>
+              <small>{stat.note}</small>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TeacherIntro() {
+  return (
+    <section className="section-teacher-intro long-section">
+      <div className="hb-wide teacher-intro-grid">
+        <div>
+          <TitleBlock eyebrow="숨은 비용" title={<>자습실 관리에는<br />보이지 않는 인건비가 들어갑니다</>} align="left" />
+          <article className="big-stat teacher-stat">
+            <span>Hidden Cost</span>
+            <p>매일 반복되는 관리 업무</p>
+            <strong>조교 1명</strong>
+            <em>작아 보여도 계속 잡아먹히는 시간</em>
+          </article>
+          <p className="lead">
+            출석 체크, 좌석 배정, 공부시간 기록, 랭킹 정리, 쿠폰 지급, 학부모 문의 응대까지 반복되는 업무를 시스템으로 줄입니다.
+          </p>
+          <a className="primary-pill" href="#contact-form">1주 데모 세팅 문의</a>
+        </div>
+        <div className="teacher-composition studyon-teacher-mockups">
+          <img className="teacher-main" src={gen("workflow-vertical-v2.png")} alt="자습ON 운영 자동화 흐름" />
+          <img className="teacher-side side-a" src={gen("feature-attendance-seat-v2.png")} alt="자습ON 출석 좌석 관리" />
+          <img className="teacher-side side-b" src={gen("feature-record-ranking-v2.png")} alt="자습ON 기록 랭킹 관리" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BridgeSection() {
+  return (
+    <section className="section-bridge">
+      <div className="hb-wide bridge-grid">
+        <div>
+          <span>학생 입력</span>
+          <strong>학생이 직접 기록</strong>
+          <p>입실·계획·타이머·퇴실</p>
+        </div>
+        <b>+</b>
+        <div>
+          <span>관리자 확인</span>
+          <strong>관리자는 한 화면 확인</strong>
+          <p>출석·좌석·랭킹·보상</p>
+        </div>
+      </div>
+      <h2>
+        사람이 계속 지켜봐야 했던 자습실 관리,
+        <br />
+        이제 시스템으로 대체하세요
+      </h2>
+      <p>자습ON은 조교와 원장님이 매일 직접 확인하던 반복 업무를 줄이는 학원 운영 도구입니다</p>
+    </section>
+  );
+}
+
+function LineBanner({ children, theme }: { children: React.ReactNode; theme: "blue" | "teacher" }) {
+  return (
+    <section className={`line-banner ${theme}`}>
+      <div className="hb-wide">
+        <h2>{children}</h2>
+      </div>
+    </section>
+  );
+}
+
+function SystemSection() {
+  return (
+    <section className="section-system-detail long-section">
+      <div className="hb-wide">
+        <TitleBlock title={<>학생이 직접 기록하고,<br />관리자는 한 화면에서 확인합니다</>} />
+        <div className="system-tabs">
+          {systemSteps.map((step) => (
+            <img src={img(step.tab)} alt="" key={step.tab} />
+          ))}
+        </div>
+        <div className="system-step-grid">
+          {systemSteps.map((step) => (
+            <article className="system-step" key={step.no}>
+              <div>
+                <span>{step.no}</span>
+                <h3>{step.title}</h3>
+                <strong>{step.subtitle}</strong>
+                <p>{step.body}</p>
+              </div>
+              <img src={asset(step.image)} alt="" />
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CoursewareSection() {
+  return (
+    <section className="section-courseware">
+      <div className="hb-wide course-head">
+        <TitleBlock
+          eyebrow="해결 구조"
+          title={<>출석·좌석·공부시간·보상까지<br />자습실 관리 업무를 자동화합니다</>}
+        />
+        <h3>사람이 매번 확인하던 일을 시스템으로 분산합니다</h3>
+        <div className="course-summary">
+          <p>학생 태블릿 앱으로 입실, 공부계획, 타이머, 퇴실을 직접 기록합니다</p>
+          <p>관리자 웹과 전자칠판이 출석, 좌석, 랭킹, 보상 현황을 자동으로 보여줍니다</p>
+        </div>
+      </div>
+      {[...mathLevels, ...englishLevels].map((level, index) => (
+        <LevelSection level={level} index={index} key={level.id} />
+      ))}
+    </section>
+  );
+}
+
+function LevelSection({
+  level,
+  index,
+}: {
+  level: (typeof mathLevels)[number];
+  index: number;
+}) {
+  const isPlain = "variant" in level && level.variant === "plain";
+
+  return (
+    <section className={`level-section ${level.id.includes("en") ? "english" : "math"} ${isPlain ? "plain" : ""}`}>
+      <div className="hb-wide">
+        <div className="level-title">
+          <strong className="level-badge">자습ON</strong>
+          <span>{level.label}</span>
+          <p>{level.kicker}</p>
+          <h3>{level.title}</h3>
+        </div>
+        {isPlain ? (
+          <div className="plain-level-card">
+            <p>{level.desc}</p>
+            <ul>
+              {level.points.map((point) => (
+                <li key={point}>{point}</li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <>
+            <div className={`slide-wall count-${Math.min(level.slides.length, 6)}`}>
+              {level.slides.map((src, i) => (
+                <img className={i === 0 ? "featured" : ""} src={asset(src)} alt="" key={`${level.id}-${src}`} />
+              ))}
+            </div>
+            <img className="down-plus" src={img("sec6_down_plus.png")} alt="" />
+          </>
+        )}
+        {!isPlain ? <p className="level-desc">{level.desc}</p> : null}
+        {!isPlain && level.boxes.length > 0 ? (
+          <div className="box-row">
+            {level.boxes.map((src) => (
+              <img src={asset(src)} alt="" key={src} />
+            ))}
+          </div>
+        ) : !isPlain ? (
+          <div className="list-grid">
+            {level.slides.map((src) => (
+              <img src={asset(src)} alt="" key={`list-${src}`} />
+            ))}
+          </div>
+        ) : null}
+      </div>
+      {index < 7 ? <div className="level-spacer" /> : null}
+    </section>
+  );
+}
+
+function TeacherDetail() {
+  return (
+    <section className="section-teacher-detail long-section">
+      <div className="hb-wide">
+        <TitleBlock title={<>자습실 관리,<br />사람에게만 맡기지 마세요</>} />
+        <div className="teacher-detail-tabs">
+          {teacherTabs.map((tab) => (
+            <article key={tab.title}>
+              <h3>{tab.title}</h3>
+              <p>{tab.body}</p>
+              <ul>
+                {tab.points.map((point) => (
+                  <li key={point}>{point}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ReviewSection() {
+  return (
+    <section className="section-review">
+      <div className="hb-wide">
+        <img src={img("sec8_top.png")} alt="" />
+        <h2>
+          자습ON이 줄여주는 반복 업무
+          <br />
+          조교와 원장님의 시간이 가벼워집니다
+        </h2>
+        <div className="review-cards">
+          {["수기 확인을 줄입니다", "보상 운영을 줄입니다", "상담 준비를 줄입니다"].map((title, i) => (
+            <article key={title}>
+              <span>0{i + 1}</span>
+              <strong>{title}</strong>
+              <p>자습실 관리 업무는 작아 보여도 매일 반복됩니다. 자습ON은 그 반복을 시스템으로 옮깁니다.</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FinalCta() {
+  return (
+    <section className="section-final">
+      <div className="hb-wide final-grid">
+        <div>
+          <h2>
+            자습실 관리,
+            <br />
+            사람에게만 맡기지 마세요.
+          </h2>
+          <p>출석이 보이고, 좌석이 관리되고, 공부시간이 쌓이고, 보상이 운영되는 공간으로 바꿉니다.</p>
+          <p className="price-copy">학생 1인 월 9,900원 · 1주 데모 세팅 가능</p>
+          <a className="primary-pill" href="#contact-form">도입 문의하기</a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="wrap-footer">
+      <div className="hb-wide footer-grid">
+        <div>
+          <div className="footer-links">
+            {["회사소개", "이용약관", "개인정보처리방침", "CUSTOMER SITE", "FAMILY SITE"].map((item) => (
+              <a href="#" key={item}>{item}</a>
+            ))}
+          </div>
+          <strong className="footer-brand">자습ON</strong>
+          <p>자습실 출석, 좌석, 공부시간, 랭킹, 보상 관리를 자동화하는 학원 운영 시스템</p>
+          <p>사람이 계속 붙어 있어야 했던 자습실 관리를 시스템으로 줄입니다.</p>
+        </div>
+        <div className="footer-call">
+          <strong>도입 및 운영 문의</strong>
+          <span>출결 관리 상담</span>
+          <span>좌석·리포트 상담</span>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+function BottomTrialBanner() {
+  return (
+    <aside className="bottom-banner">
+      <div className="hb-wide">
+        <img src={img("ban_img1.png")} alt="" />
+        <strong>자습ON 도입 문의</strong>
+        <a href="#contact-form">문의하기</a>
+      </div>
+    </aside>
+  );
+}
+
+function TitleBlock({
+  eyebrow,
+  title,
+  align = "center",
+}: {
+  eyebrow?: string;
+  title: React.ReactNode;
+  align?: "center" | "left";
+}) {
+  return (
+    <div className={`title-block ${align}`}>
+      {eyebrow ? <span>{eyebrow}</span> : null}
+      <h2>{title}</h2>
     </div>
   );
 }

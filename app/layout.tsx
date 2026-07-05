@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "STUDYON TV Display",
-  description: "STUDYON TV display web app",
+  title: "자습ON",
+  description: "무인 자습실을 위한 출결, 좌석, 학습 리포트 운영 자동화",
 };
 
 export default function RootLayout({
