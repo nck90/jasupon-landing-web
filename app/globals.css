@@ -60,10 +60,6 @@ section {
   padding-bottom: 118px;
 }
 
-.mobile-mini-nav {
-  display: none;
-}
-
 .hb-wide {
   width: min(1200px, calc(100vw - 80px));
   margin-inline: auto;
@@ -1727,12 +1723,11 @@ section {
 
 @media (max-width: 640px) {
   html {
-    scroll-behavior: auto;
-    scroll-padding-top: 118px;
+    scroll-padding-top: 72px;
   }
 
   section {
-    scroll-margin-top: 118px;
+    scroll-margin-top: 72px;
   }
 
   .smarthb-long {
@@ -1758,39 +1753,6 @@ section {
 
   .hb-header nav {
     display: none;
-  }
-
-  .mobile-mini-nav {
-    position: fixed;
-    right: 0;
-    left: 0;
-    top: 64px;
-    z-index: 58;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
-    padding: 8px 12px;
-    border-bottom: 1px solid rgb(15 23 42 / 0.08);
-    background: rgb(255 255 255 / 0.92);
-    backdrop-filter: blur(12px);
-  }
-
-  .mobile-mini-nav a {
-    display: inline-flex;
-    min-height: 44px;
-    align-items: center;
-    justify-content: center;
-    border-radius: 999px;
-    background: #f1f5f9;
-    color: #0f172a;
-    font-size: 13px;
-    font-weight: 900;
-    letter-spacing: -0.04em;
-  }
-
-  .mobile-mini-nav a:last-child {
-    background: #005dff;
-    color: #fff;
   }
 
   .section-hero,

@@ -59,7 +59,7 @@ const systemSteps = [
     no: "01",
     title: "출석 확인 자동화",
     subtitle: "입실, 퇴실 시간이 분 단위로 기록",
-    body: "몇시 몇분에 들어오고 나갔는지 남아 온 학생과 안 온 학생을 바로 구분합니다.",
+    body: "몇시 몇분에 들어오고 나갔는지 남아 자습ON에서 바로 구분합니다.",
     image: "feature-attendance.png",
     href: "#attendance",
   },
@@ -110,7 +110,7 @@ const mathLevels = [
     id: "math1",
     label: "출결 자동화",
     kicker: "조교가 계속 체크하던 출석 확인을",
-    title: "온 학생과 안 온 학생을 바로 구분합니다",
+    title: "자습ON에서 바로 구분합니다",
     variant: "plain",
     points: [
       "입실·퇴실 시간이 분 단위로 자동 기록",
@@ -125,7 +125,13 @@ const mathLevels = [
     id: "math2",
     label: "좌석 운영",
     kicker: "좌석 배정과 자리 이탈 확인까지",
-    title: "자습실을 돌아다니며 확인하는 시간을 줄입니다",
+    title: (
+      <>
+        자습실을 돌아다니며
+        <br />
+        확인하는 시간을 줄입니다
+      </>
+    ),
     variant: "plain",
     points: [
       "배정 좌석과 빈 좌석 확인",
@@ -140,7 +146,13 @@ const mathLevels = [
     id: "math3",
     label: "공부시간 리포트",
     kicker: "앉아 있는 시간보다 중요한 것은",
-    title: "실제 공부시간이 데이터로 남는 것입니다",
+    title: (
+      <>
+        실제 공부시간이 데이터로
+        <br />
+        남는 것입니다
+      </>
+    ),
     variant: "plain",
     points: [
       "과목별 공부 타이머 기록",
@@ -154,8 +166,20 @@ const mathLevels = [
   {
     id: "mathAdd",
     label: "운영 확장",
-    kicker: "학원이 커질수록 더 필요한 것은",
-    title: "사람마다 달라지지 않는 운영 기준입니다",
+    kicker: (
+      <>
+        학원이 커질수록 더 필요한지
+        <br />
+        보입니다
+      </>
+    ),
+    title: (
+      <>
+        사람마다 달라지지 않는
+        <br />
+        운영 기준입니다
+      </>
+    ),
     variant: "plain",
     points: [
       "출석·좌석 기준을 한 화면 기준으로 통일",
@@ -203,7 +227,13 @@ const englishLevels = [
     id: "en3",
     label: "상담 기록",
     kicker: "원장님이 매번 직접 확인하지 않아도",
-    title: "지금 누가 있고 누가 관리 필요한지 보입니다",
+    title: (
+      <>
+        지금 누가 있고 누가 관리 필요한지
+        <br />
+        보입니다
+      </>
+    ),
     variant: "plain",
     points: [
       "현재 입실·미입실·지각 학생 구분",
@@ -218,7 +248,7 @@ const englishLevels = [
     id: "enAdd",
     label: "레이스·보상",
     kicker: "랭킹과 보상도 사람이 매번 정리하지 않게",
-    title: "공부 레이스가 자습 분위기를 만듭니다",
+    title: "공부 레이스가 분위기를 만듭니다",
     variant: "plain",
     points: [
       "공부시간 레이스와 랭킹 시각화",
@@ -235,13 +265,14 @@ export default function Home() {
   return (
     <main className="smarthb smarthb-long">
       <Header />
-      <MobileMiniNav />
       <Hero />
       <DataSection />
       <TeacherIntro />
       <BridgeSection />
       <LineBanner theme="blue">
-        사람이 매번 확인하던 자습실 관리를 시스템으로 줄입니다
+        사람이 매번 확인하던 일을
+        <br />
+        시스템으로 줄입니다
       </LineBanner>
       <SystemSection />
       <CoursewareSection />
@@ -253,17 +284,6 @@ export default function Home() {
       <BottomTrialBanner />
       <ContactForm />
     </main>
-  );
-}
-
-function MobileMiniNav() {
-  return (
-    <nav className="mobile-mini-nav" aria-label="모바일 빠른 이동">
-      <a href="#features">기능</a>
-      <a href="#report">리포트</a>
-      <a href="#pricing">가격</a>
-      <a href="#contact-form">문의</a>
-    </nav>
   );
 }
 
@@ -430,7 +450,7 @@ function BridgeSection() {
         </div>
       </div>
       <h2>
-        사람이 계속 지켜봐야 했던 자습실 관리,
+        사람이 계속 확인하던 일을
         <br />
         이제 시스템으로 대체하세요
       </h2>
@@ -510,15 +530,21 @@ function CoursewareSection() {
             </>
           }
         />
-        <h3>사람이 매번 확인하던 일을 시스템으로 분산합니다</h3>
+        <h3>
+          사람이 매번 확인하던 일을
+          <br />
+          시스템으로 분산합니다
+        </h3>
         <div className="course-summary">
           <p>
-            학생 태블릿 앱으로 입실 시간, 공부계획, 타이머, 퇴실 시간을 직접
-            기록합니다
+            학생 태블릿 앱으로 입실 시간, 공부계획, 타이머, 퇴실 시간을
+            <br />
+            직접 기록합니다
           </p>
           <p>
-            관리자 웹과 전자칠판이 출석, 좌석, 랭킹, 보상 현황을 자동으로
-            보여줍니다
+            관리자 웹과 전자칠판이 출석, 좌석, 랭킹, 보상 현황을
+            <br />
+            자동으로 보여줍니다
           </p>
         </div>
         <div className="product-scenes" aria-label="자습ON 제품 화면 구성">
@@ -544,7 +570,7 @@ function CoursewareSection() {
               alt="전자칠판에 표시되는 공부시간 랭킹 화면"
             />
             <span>전자칠판</span>
-            <strong>랭킹과 레이스를 자동 노출해 분위기 형성</strong>
+            <strong>공부 레이스가 분위기를 만듭니다</strong>
           </article>
         </div>
       </div>
@@ -665,9 +691,9 @@ function RaceSection() {
         <div>
           <span className="race-eyebrow">레이스·랭킹</span>
           <h2>
-            공부시간이 보이면
+            공부 레이스가
             <br />
-            자습실 분위기가 달라집니다
+            분위기를 만듭니다
           </h2>
           <p>
             학생들이 지금 누가 앞서고 있는지 바로 볼 수 있도록 공부시간 레이스와
