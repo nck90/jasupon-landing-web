@@ -235,6 +235,7 @@ export default function Home() {
   return (
     <main className="smarthb smarthb-long">
       <Header />
+      <MobileMiniNav />
       <Hero />
       <DataSection />
       <TeacherIntro />
@@ -252,6 +253,17 @@ export default function Home() {
       <BottomTrialBanner />
       <ContactForm />
     </main>
+  );
+}
+
+function MobileMiniNav() {
+  return (
+    <nav className="mobile-mini-nav" aria-label="모바일 빠른 이동">
+      <a href="#features">기능</a>
+      <a href="#report">리포트</a>
+      <a href="#pricing">가격</a>
+      <a href="#contact-form">문의</a>
+    </nav>
   );
 }
 
@@ -508,6 +520,32 @@ function CoursewareSection() {
             관리자 웹과 전자칠판이 출석, 좌석, 랭킹, 보상 현황을 자동으로
             보여줍니다
           </p>
+        </div>
+        <div className="product-scenes" aria-label="자습ON 제품 화면 구성">
+          <article>
+            <img
+              src={gen("feature-attendance-seat-v2.png")}
+              alt="학생 태블릿에서 출석과 좌석을 확인하는 화면"
+            />
+            <span>학생 태블릿</span>
+            <strong>입실 시간과 좌석을 학생이 직접 기록</strong>
+          </article>
+          <article>
+            <img
+              src={gen("feature-records.png")}
+              alt="관리자 웹에서 공부시간과 학생 상태를 확인하는 화면"
+            />
+            <span>관리자 웹</span>
+            <strong>누가 몇시 몇분에 왔는지 한 화면에서 확인</strong>
+          </article>
+          <article>
+            <img
+              src={gen("feature-ranking.png")}
+              alt="전자칠판에 표시되는 공부시간 랭킹 화면"
+            />
+            <span>전자칠판</span>
+            <strong>랭킹과 레이스를 자동 노출해 분위기 형성</strong>
+          </article>
         </div>
       </div>
       {[...mathLevels, ...englishLevels].map((level, index) => (
