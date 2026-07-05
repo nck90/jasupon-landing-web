@@ -13,6 +13,7 @@ const requiredEnv = {
   supabaseUrl: process.env.SUPABASE_URL,
   supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
   discordWebhookUrl: process.env.DISCORD_WEBHOOK_URL,
+  fallbackFormId: process.env.SUPABASE_FALLBACK_FORM_ID,
 };
 
 function clean(value: unknown) {
@@ -67,7 +68,42 @@ export async function POST(request: NextRequest) {
 
   if (!supabaseResponse.ok) {
     const detail = await supabaseResponse.text();
-    console.error("Supabase inquiry insert failed", detail);
+    const tableMissing = detail.includes("PGRST205") || detail.includes("landing_inquiries");
+
+    if (tableMissing && requiredEnv.fallbackFormId) {
+      const fallbackResponse = await fetch(`${requiredEnv.supabaseUrl}/rest/v1/form_responses`, {
+        method: "POST",
+        headers: {
+          apikey: requiredEnv.supabaseServiceRoleKey,
+          Authorization: `Bearer ${requiredEnv.supabaseServiceRoleKey}`,
+          "Content-Type": "application/json",
+          Prefer: "return=minimal",
+        },
+        body: JSON.stringify({
+          form_id: requiredEnv.fallbackFormId,
+          respondent_label: academyName,
+          answers: {
+            academyName,
+            contactName,
+            phone,
+            studentCount,
+            memo,
+            pageUrl,
+            source: "jasupon-landing-web",
+          },
+          user_agent: request.headers.get("user-agent"),
+        }),
+      });
+
+      if (fallbackResponse.ok) {
+        return NextResponse.json({ ok: true });
+      }
+
+      console.error("Supabase fallback inquiry insert failed", await fallbackResponse.text());
+    } else {
+      console.error("Supabase inquiry insert failed", detail);
+    }
+
     return NextResponse.json({ message: "Failed to save inquiry" }, { status: 502 });
   }
 
