@@ -3,7 +3,11 @@ import ContactForm from "./contact-form";
 const img = (name: string) => `/smarthb-assets/original/${name}`;
 const gen = (name: string) => `/studyon-generated/${name}`;
 const asset = (name: string) =>
-  name.startsWith("feature-") || name.startsWith("hero-") || name.startsWith("workflow-") ? gen(name) : img(name);
+  name.startsWith("feature-") ||
+  name.startsWith("hero-") ||
+  name.startsWith("workflow-")
+    ? gen(name)
+    : img(name);
 
 const levelAnchor = (id: string) => {
   const anchors: Record<string, string> = {
@@ -20,8 +24,9 @@ const nav = [
   { label: "자습ON", href: "#hero" },
   { label: "운영시스템", href: "#system" },
   { label: "기능소개", href: "#features" },
+  { label: "리포트", href: "#report" },
+  { label: "요금안내", href: "#pricing" },
   { label: "도입문의", href: "#contact" },
-  { label: "활용사례", href: "#case" },
 ];
 
 const techStats = [
@@ -37,7 +42,7 @@ const techStats = [
     title: "보이지 않는 인건비",
     value: "조교 시간",
     body: "작아 보여도 매일 누적되는 관리 비용",
-    note: "출석 체크, 지각 확인, 랭킹 정리, 쿠폰 지급이 반복되면 조교 1명의 시간을 계속 잡아먹습니다.",
+    note: "출석 체크, 지각 확인, 랭킹 정리, 쿠폰 지급이 반복되면 조교 1명 이상의 시간을 계속 잡아먹습니다.",
   },
   {
     eyebrow: "Solution",
@@ -52,35 +57,51 @@ const systemSteps = [
   {
     no: "01",
     title: "출석 확인 자동화",
-    subtitle: "입실·퇴실·지각·미입실 상태 확인",
-    body: "누가 왔고 안 왔는지 조교가 수기로 확인하지 않아도 관리자 화면에서 바로 봅니다.",
+    subtitle: "입실, 퇴실, 지각, 미입실 상태 확인",
+    body: "온 학생과 안 온 학생을 관리자 화면에서 바로 구분합니다.",
     image: "feature-attendance.png",
-    tab: "sec5_step01_on.png",
+    href: "#attendance",
   },
   {
     no: "02",
     title: "좌석 관리 자동화",
-    subtitle: "배정 좌석·빈 좌석·이탈 학생 파악",
-    body: "자리 배정과 사용 현황을 시스템으로 남겨 자습실을 돌아다니며 확인하는 시간을 줄입니다.",
+    subtitle: "배정 좌석, 빈 좌석, 이탈 학생 파악",
+    body: "자리 배정과 사용 현황을 남겨 돌아다니며 확인하는 시간을 줄입니다.",
     image: "feature-seat.png",
-    tab: "sec5_step02_on.png",
+    href: "#seats",
   },
   {
     no: "03",
     title: "공부시간 기록",
-    subtitle: "공부 타이머·누적 시간·목표 미달 확인",
-    body: "앉아 있는 시간과 공부 기록을 구분해 관리가 필요한 학생을 더 빠르게 찾습니다.",
+    subtitle: "공부 타이머, 누적 시간, 목표 미달 확인",
+    body: "앉아 있는 시간보다 실제 공부 기록을 기준으로 관리합니다.",
     image: "feature-records.png",
-    tab: "sec5_step03_on.png",
+    href: "#reports",
   },
   {
     no: "04",
-    title: "랭킹·보상 운영",
-    subtitle: "공부시간 랭킹·챌린지·쿠폰 대상자",
-    body: "엑셀로 정리하던 이벤트와 보상 기준을 데이터 기반으로 운영할 수 있습니다.",
-    image: "feature-ranking.png",
-    tab: "sec5_step04_on.png",
+    title: "학부모 리포트",
+    subtitle: "출결, 공부시간, 누적 기록 공유",
+    body: "상담 전 바로 보여줄 수 있는 학생별 자습 리포트를 만듭니다.",
+    image: "feature-record-ranking-v2.png",
+    href: "#report",
   },
+  {
+    no: "05",
+    title: "랭킹·보상 운영",
+    subtitle: "공부시간 랭킹, 챌린지, 쿠폰 대상자",
+    body: "엑셀 정리 없이 랭킹과 보상 기준을 데이터로 운영합니다.",
+    image: "feature-ranking.png",
+    href: "#rewards",
+  },
+];
+
+const pricingPlans = [
+  { range: "1~10명", price: "9,900원" },
+  { range: "11~30명", price: "19,900원" },
+  { range: "31~70명", price: "39,900원" },
+  { range: "71~150명", price: "69,900원" },
+  { range: "151명 이상", price: "별도 문의" },
 ];
 
 const mathLevels = [
@@ -90,7 +111,11 @@ const mathLevels = [
     kicker: "조교가 계속 체크하던 출석 확인을",
     title: "온 학생과 안 온 학생을 바로 구분합니다",
     variant: "plain",
-    points: ["입실·퇴실 상태 자동 기록", "지각·미입실 학생 빠른 확인", "관리 필요한 학생 누락 감소"],
+    points: [
+      "입실·퇴실 상태 자동 기록",
+      "지각·미입실 학생 빠른 확인",
+      "관리 필요한 학생 누락 감소",
+    ],
     slides: [],
     boxes: [],
     desc: "입실, 퇴실, 지각, 미입실 상태가 기록되면 관리 필요한 학생을 놓치지 않습니다.",
@@ -101,7 +126,11 @@ const mathLevels = [
     kicker: "좌석 배정과 자리 이탈 확인까지",
     title: "자습실을 돌아다니며 확인하는 시간을 줄입니다",
     variant: "plain",
-    points: ["배정 좌석과 빈 좌석 확인", "학생별 좌석 이용 이력 관리", "데스크 응대 기준 단순화"],
+    points: [
+      "배정 좌석과 빈 좌석 확인",
+      "학생별 좌석 이용 이력 관리",
+      "데스크 응대 기준 단순화",
+    ],
     slides: [],
     boxes: [],
     desc: "배정 좌석, 빈 좌석, 이용 이력을 한 화면에서 확인해 데스크 대응을 단순화합니다.",
@@ -112,10 +141,14 @@ const mathLevels = [
     kicker: "앉아 있는 시간보다 중요한 것은",
     title: "실제 공부시간이 데이터로 남는 것입니다",
     variant: "plain",
-    points: ["과목별 공부 타이머 기록", "학생별 누적 공부시간 확인", "목표 미달 학생과 성실 학생 구분"],
+    points: [
+      "과목별 공부 타이머 기록",
+      "학생별 누적 공부시간 확인",
+      "학부모에게 보낼 수 있는 리포트 생성",
+    ],
     slides: [],
     boxes: [],
-    desc: "과목별 타이머와 누적 기록으로 목표 미달 학생과 성실한 학생을 빠르게 구분합니다.",
+    desc: "과목별 타이머와 누적 기록으로 목표 미달 학생과 성실한 학생을 구분하고, 학부모 상담에 쓸 리포트까지 만듭니다.",
   },
   {
     id: "mathAdd",
@@ -123,7 +156,11 @@ const mathLevels = [
     kicker: "학원이 커질수록 더 필요한 것은",
     title: "사람마다 달라지지 않는 운영 기준입니다",
     variant: "plain",
-    points: ["출석·좌석 기준을 한 화면 기준으로 통일", "조교별 확인 방식 차이 감소", "원장님이 보는 운영 지표와 현장 대응 기준 일치"],
+    points: [
+      "출석·좌석 기준을 한 화면 기준으로 통일",
+      "조교별 확인 방식 차이 감소",
+      "원장님이 보는 운영 지표와 현장 대응 기준 일치",
+    ],
     slides: [],
     boxes: [],
     desc: "원장님, 조교, 선생님이 같은 데이터를 보고 출석·좌석·공부시간 기준을 맞춥니다.",
@@ -137,7 +174,11 @@ const englishLevels = [
     kicker: "학부모 문의에 감으로 답하지 않도록",
     title: "보여줄 수 있는 자습 기록을 만듭니다",
     variant: "plain",
-    points: ["입실·퇴실·결석 이력 확인", "학생별 공부시간 기록 축적", "상담 전 바로 확인 가능한 관리 근거 확보"],
+    points: [
+      "입실·퇴실·결석 이력 확인",
+      "학생별 공부시간 기록 축적",
+      "상담 전 바로 확인 가능한 관리 근거 확보",
+    ],
     slides: [],
     boxes: [],
     desc: "입실, 퇴실, 결석, 공부시간 기록이 쌓이면 상담 근거가 선명해집니다.",
@@ -148,7 +189,11 @@ const englishLevels = [
     kicker: "학생이 직접 기록하고 관리자는 확인",
     title: "확인 업무를 학생 입력과 시스템으로 분산합니다",
     variant: "plain",
-    points: ["학생은 입실·계획·타이머·퇴실을 직접 기록", "관리자는 누락·지각·목표 미달 학생만 확인", "반복 확인 업무를 학생 흐름과 관리자 화면으로 분산"],
+    points: [
+      "학생은 입실·계획·타이머·퇴실을 직접 기록",
+      "관리자는 누락·지각·목표 미달 학생만 확인",
+      "반복 확인 업무를 학생 흐름과 관리자 화면으로 분산",
+    ],
     slides: [],
     boxes: [],
     desc: "로그인, 입실, 공부계획, 타이머, 퇴실 흐름이 남기 때문에 계속 지켜볼 필요가 줄어듭니다.",
@@ -159,7 +204,11 @@ const englishLevels = [
     kicker: "원장님이 매번 직접 확인하지 않아도",
     title: "지금 누가 있고 누가 관리 필요한지 보입니다",
     variant: "plain",
-    points: ["현재 입실·미입실·지각 학생 구분", "목표 미달 학생 확인", "좌석 배정과 해지 이력 확인"],
+    points: [
+      "현재 입실·미입실·지각 학생 구분",
+      "목표 미달 학생 확인",
+      "좌석 배정과 해지 이력 확인",
+    ],
     slides: [],
     boxes: [],
     desc: "현재 입실 학생, 미입실 학생, 지각 학생, 목표 미달 학생을 한 화면에서 확인합니다.",
@@ -170,28 +219,14 @@ const englishLevels = [
     kicker: "랭킹과 보상도 사람이 매번 정리하지 않게",
     title: "공부시간과 출석 데이터로 자동 운영합니다",
     variant: "plain",
-    points: ["공부시간 랭킹 기준 자동화", "출석 챌린지와 쿠폰 대상자 관리", "엑셀 정리 없이 보상 운영 기준 유지"],
+    points: [
+      "공부시간 랭킹 기준 자동화",
+      "출석 챌린지와 쿠폰 대상자 관리",
+      "엑셀 정리 없이 보상 운영 기준 유지",
+    ],
     slides: [],
     boxes: [],
     desc: "랭킹, 챌린지, 쿠폰, 보상 대상자를 데이터 기준으로 관리해 이벤트 운영을 가볍게 만듭니다.",
-  },
-];
-
-const teacherTabs = [
-  {
-    title: "관리 인력 감소",
-    body: "출석, 좌석, 지각·결석 상태를 한 화면에서 확인해 조교가 계속 붙어 있어야 하는 시간을 줄입니다.",
-    points: ["입실·퇴실 확인", "미입실 학생 확인", "좌석 이탈 확인"],
-  },
-  {
-    title: "원장 부담 감소",
-    body: "자습실을 계속 돌아다니지 않아도 지금 누가 있고, 누가 공부했고, 누가 관리 필요한지 확인합니다.",
-    points: ["현재 입실 현황", "좌석 사용 현황", "목표 미달 학생"],
-  },
-  {
-    title: "상담 근거 확보",
-    body: "공부시간과 출석 데이터가 남아 학부모 상담 때 보여줄 수 있는 관리 근거가 생깁니다.",
-    points: ["공부시간 기록", "출결 이력", "랭킹·보상 이력"],
   },
 ];
 
@@ -203,12 +238,13 @@ export default function Home() {
       <DataSection />
       <TeacherIntro />
       <BridgeSection />
-      <LineBanner theme="blue">사람이 매번 확인하던 자습실 관리를 시스템으로 줄입니다</LineBanner>
+      <LineBanner theme="blue">
+        사람이 매번 확인하던 자습실 관리를 시스템으로 줄입니다
+      </LineBanner>
       <SystemSection />
       <CoursewareSection />
-      <LineBanner theme="teacher">조교와 원장님의 반복 확인 업무를 줄이는 자습ON</LineBanner>
-      <TeacherDetail />
-      <ReviewSection />
+      <ReportSection />
+      <PricingSection />
       <FinalCta />
       <Footer />
       <BottomTrialBanner />
@@ -226,7 +262,11 @@ function Header() {
         </a>
         <nav>
           {nav.map((item) => (
-            <a className={item.label === "자습ON" ? "active" : ""} href={item.href} key={item.label}>
+            <a
+              className={item.label === "자습ON" ? "active" : ""}
+              href={item.href}
+              key={item.label}
+            >
               {item.label}
             </a>
           ))}
@@ -244,14 +284,17 @@ function Hero() {
           <p>자습실, 아직도 사람이 직접 관리하고 있나요?</p>
           <h1>
             출석·좌석·공부시간·랭킹·보상까지
-            <br />
-            한 번에 관리하는 자습실 운영 시스템
+            <br />한 번에 관리하는 자습실 운영 시스템
           </h1>
           <strong>자습ON</strong>
-          <em className="hero-price">학생 1인 월 9,900원</em>
+          <em className="hero-price">월 9,900원부터</em>
         </div>
         <div className="hero-images">
-          <img className="studyon-hero-mockup" src={gen("hero-device-mockup-v2.png")} alt="자습ON 학생 앱과 관리자 웹 화면" />
+          <img
+            className="studyon-hero-mockup"
+            src={gen("hero-device-mockup-v2.png")}
+            alt="자습ON 학생 앱과 관리자 웹 화면"
+          />
         </div>
       </div>
     </section>
@@ -262,11 +305,31 @@ function DataSection() {
   return (
     <section className="section-data long-section" id="problem">
       <div className="hb-wide">
-          <TitleBlock eyebrow="메인 문제" title={<>자습실은 있는데,<br />관리하려면 사람이 필요합니다</>} />
+        <TitleBlock
+          title={
+            <>
+              자습실은 있는데,
+              <br />
+              관리하려면 사람이 필요합니다
+            </>
+          }
+        />
         <div className="phone-composition">
-          <img className="phone left" src={gen("feature-attendance-seat-v2.png")} alt="자습ON 출석 관리 화면" />
-          <img className="phone center" src={gen("feature-record-ranking-v2.png")} alt="자습ON 공부 기록 화면" />
-          <img className="phone right" src={gen("workflow-strip-v2.png")} alt="자습ON 운영 자동화 흐름" />
+          <img
+            className="phone left"
+            src={gen("feature-attendance-seat-v2.png")}
+            alt="자습ON 출석 관리 화면"
+          />
+          <img
+            className="phone center"
+            src={gen("feature-record-ranking-v2.png")}
+            alt="자습ON 공부 기록 화면"
+          />
+          <img
+            className="phone right"
+            src={gen("workflow-strip-v2.png")}
+            alt="자습ON 운영 자동화 흐름"
+          />
         </div>
         <div className="stat-row">
           {techStats.map((stat) => (
@@ -289,22 +352,47 @@ function TeacherIntro() {
     <section className="section-teacher-intro long-section" id="operation">
       <div className="hb-wide teacher-intro-grid">
         <div>
-          <TitleBlock eyebrow="숨은 비용" title={<>자습실 관리에는<br />보이지 않는 인건비가 들어갑니다</>} align="left" />
+          <TitleBlock
+            eyebrow="숨은 비용"
+            title={
+              <>
+                자습실 관리에는
+                <br />
+                보이지 않는 인건비가 들어갑니다
+              </>
+            }
+            align="left"
+          />
           <article className="big-stat teacher-stat">
             <span>Hidden Cost</span>
             <p>매일 반복되는 관리 업무</p>
-            <strong>조교 1명</strong>
+            <strong>조교 1명 이상</strong>
             <em>작아 보여도 계속 잡아먹히는 시간</em>
           </article>
           <p className="lead">
-            출석 체크, 좌석 배정, 공부시간 기록, 랭킹 정리, 쿠폰 지급, 학부모 문의 응대까지 반복되는 업무를 시스템으로 줄입니다.
+            출석 체크, 좌석 배정, 공부시간 기록, 랭킹 정리, 쿠폰 지급, 학부모
+            문의 응대까지 반복되는 업무를 시스템으로 줄입니다.
           </p>
-          <a className="primary-pill" href="#contact-form">1주 데모 세팅 문의</a>
+          <a className="primary-pill" href="#contact-form">
+            1주 데모 세팅 문의
+          </a>
         </div>
         <div className="teacher-composition studyon-teacher-mockups">
-          <img className="teacher-main" src={gen("workflow-vertical-v2.png")} alt="자습ON 운영 자동화 흐름" />
-          <img className="teacher-side side-a" src={gen("feature-attendance-seat-v2.png")} alt="자습ON 출석 좌석 관리" />
-          <img className="teacher-side side-b" src={gen("feature-record-ranking-v2.png")} alt="자습ON 기록 랭킹 관리" />
+          <img
+            className="teacher-main"
+            src={gen("workflow-vertical-v2.png")}
+            alt="자습ON 운영 자동화 흐름"
+          />
+          <img
+            className="teacher-side side-a"
+            src={gen("feature-attendance-seat-v2.png")}
+            alt="자습ON 출석 좌석 관리"
+          />
+          <img
+            className="teacher-side side-b"
+            src={gen("feature-record-ranking-v2.png")}
+            alt="자습ON 기록 랭킹 관리"
+          />
         </div>
       </div>
     </section>
@@ -332,12 +420,21 @@ function BridgeSection() {
         <br />
         이제 시스템으로 대체하세요
       </h2>
-      <p>자습ON은 조교와 원장님이 매일 직접 확인하던 반복 업무를 줄이는 학원 운영 도구입니다</p>
+      <p>
+        자습ON은 조교와 원장님이 매일 직접 확인하던 반복 업무를 줄이는 학원 운영
+        도구입니다
+      </p>
     </section>
   );
 }
 
-function LineBanner({ children, theme }: { children: React.ReactNode; theme: "blue" | "teacher" }) {
+function LineBanner({
+  children,
+  theme,
+}: {
+  children: React.ReactNode;
+  theme: "blue" | "teacher";
+}) {
   return (
     <section className={`line-banner ${theme}`}>
       <div className="hb-wide">
@@ -351,10 +448,18 @@ function SystemSection() {
   return (
     <section className="section-system-detail long-section" id="system">
       <div className="hb-wide">
-        <TitleBlock title={<>학생이 직접 기록하고,<br />관리자는 한 화면에서 확인합니다</>} />
+        <TitleBlock
+          title={
+            <>
+              학생이 직접 기록하고,
+              <br />
+              관리자는 한 화면에서 확인합니다
+            </>
+          }
+        />
         <div className="system-tabs">
           {systemSteps.map((step) => (
-            <a href={`#${step.no === "01" ? "attendance" : step.no === "02" ? "seats" : step.no === "03" ? "reports" : "rewards"}`} key={step.no}>
+            <a href={step.href} key={step.no}>
               <span>STEP {step.no}</span>
               <strong>{step.title}</strong>
             </a>
@@ -369,7 +474,6 @@ function SystemSection() {
                 <strong>{step.subtitle}</strong>
                 <p>{step.body}</p>
               </div>
-              <img src={asset(step.image)} alt="" />
             </article>
           ))}
         </div>
@@ -384,12 +488,23 @@ function CoursewareSection() {
       <div className="hb-wide course-head">
         <TitleBlock
           eyebrow="해결 구조"
-          title={<>출석·좌석·공부시간·보상까지<br />자습실 관리 업무를 자동화합니다</>}
+          title={
+            <>
+              출석·좌석·공부시간·보상까지
+              <br />
+              자습실 관리 업무를 자동화합니다
+            </>
+          }
         />
         <h3>사람이 매번 확인하던 일을 시스템으로 분산합니다</h3>
         <div className="course-summary">
-          <p>학생 태블릿 앱으로 입실, 공부계획, 타이머, 퇴실을 직접 기록합니다</p>
-          <p>관리자 웹과 전자칠판이 출석, 좌석, 랭킹, 보상 현황을 자동으로 보여줍니다</p>
+          <p>
+            학생 태블릿 앱으로 입실, 공부계획, 타이머, 퇴실을 직접 기록합니다
+          </p>
+          <p>
+            관리자 웹과 전자칠판이 출석, 좌석, 랭킹, 보상 현황을 자동으로
+            보여줍니다
+          </p>
         </div>
       </div>
       {[...mathLevels, ...englishLevels].map((level, index) => (
@@ -431,9 +546,16 @@ function LevelSection({
           </div>
         ) : (
           <>
-            <div className={`slide-wall count-${Math.min(level.slides.length, 6)}`}>
+            <div
+              className={`slide-wall count-${Math.min(level.slides.length, 6)}`}
+            >
               {level.slides.map((src, i) => (
-                <img className={i === 0 ? "featured" : ""} src={asset(src)} alt="" key={`${level.id}-${src}`} />
+                <img
+                  className={i === 0 ? "featured" : ""}
+                  src={asset(src)}
+                  alt=""
+                  key={`${level.id}-${src}`}
+                />
               ))}
             </div>
             <img className="down-plus" src={img("sec6_down_plus.png")} alt="" />
@@ -459,48 +581,67 @@ function LevelSection({
   );
 }
 
-function TeacherDetail() {
+function ReportSection() {
   return (
-    <section className="section-teacher-detail long-section">
+    <section className="section-report" id="report">
       <div className="hb-wide">
-        <TitleBlock title={<>자습실 관리,<br />사람에게만 맡기지 마세요</>} />
-        <div className="teacher-detail-tabs">
-          {teacherTabs.map((tab) => (
-            <article key={tab.title}>
-              <h3>{tab.title}</h3>
-              <p>{tab.body}</p>
-              <ul>
-                {tab.points.map((point) => (
-                  <li key={point}>{point}</li>
-                ))}
-              </ul>
-            </article>
-          ))}
+        <TitleBlock
+          eyebrow="리포트"
+          title={
+            <>
+              학부모에게 보낼 수 있는
+              <br />
+              자습 기록을 만듭니다
+            </>
+          }
+        />
+        <div className="report-grid">
+          <article>
+            <span>01</span>
+            <strong>출결 리포트</strong>
+            <p>입실, 퇴실, 지각, 미입실 기록을 학생별로 확인합니다.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <strong>공부시간 리포트</strong>
+            <p>과목별 타이머와 누적 공부시간을 상담 자료로 정리합니다.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <strong>관리 대상 확인</strong>
+            <p>목표 미달, 결석, 지각이 잦은 학생을 빠르게 구분합니다.</p>
+          </article>
         </div>
       </div>
     </section>
   );
 }
 
-function ReviewSection() {
+function PricingSection() {
   return (
-    <section className="section-review" id="case">
+    <section className="section-pricing" id="pricing">
       <div className="hb-wide">
-        <img src={img("sec8_top.png")} alt="" />
-        <h2>
-          자습ON이 줄여주는 반복 업무
-          <br />
-          조교와 원장님의 시간이 가벼워집니다
-        </h2>
-        <div className="review-cards">
-          {["수기 확인을 줄입니다", "보상 운영을 줄입니다", "상담 준비를 줄입니다"].map((title, i) => (
-            <article key={title}>
-              <span>0{i + 1}</span>
-              <strong>{title}</strong>
-              <p>자습실 관리 업무는 작아 보여도 매일 반복됩니다. 자습ON은 그 반복을 시스템으로 옮깁니다.</p>
+        <TitleBlock
+          eyebrow="요금안내"
+          title={
+            <>
+              학생 수에 맞춰
+              <br />
+              부담 없이 시작하세요
+            </>
+          }
+        />
+        <div className="pricing-table">
+          {pricingPlans.map((plan) => (
+            <article key={plan.range}>
+              <span>{plan.range}</span>
+              <strong>{plan.price}</strong>
             </article>
           ))}
         </div>
+        <p className="pricing-note">
+          월 이용료 기준 · 151명 이상은 학원 운영 방식에 맞춰 별도 상담
+        </p>
       </div>
     </section>
   );
@@ -516,9 +657,14 @@ function FinalCta() {
             <br />
             사람에게만 맡기지 마세요.
           </h2>
-          <p>출석이 보이고, 좌석이 관리되고, 공부시간이 쌓이고, 보상이 운영되는 공간으로 바꿉니다.</p>
-          <p className="price-copy">학생 1인 월 9,900원 · 1주 데모 세팅 가능</p>
-          <a className="primary-pill" href="#contact-form">도입 문의하기</a>
+          <p>
+            출석이 보이고, 좌석이 관리되고, 공부시간이 쌓이고, 보상이 운영되는
+            공간으로 바꿉니다.
+          </p>
+          <p className="price-copy">월 9,900원부터 · 1주 데모 세팅 가능</p>
+          <a className="primary-pill" href="#contact-form">
+            도입 문의하기
+          </a>
         </div>
       </div>
     </section>
@@ -530,13 +676,11 @@ function Footer() {
     <footer className="wrap-footer">
       <div className="hb-wide footer-grid">
         <div>
-          <div className="footer-links">
-            {["회사소개", "이용약관", "개인정보처리방침", "CUSTOMER SITE", "FAMILY SITE"].map((item) => (
-              <a href="#" key={item}>{item}</a>
-            ))}
-          </div>
           <strong className="footer-brand">자습ON</strong>
-          <p>자습실 출석, 좌석, 공부시간, 랭킹, 보상 관리를 자동화하는 학원 운영 시스템</p>
+          <p>
+            자습실 출석, 좌석, 공부시간, 랭킹, 보상 관리를 자동화하는 학원 운영
+            시스템
+          </p>
           <p>사람이 계속 붙어 있어야 했던 자습실 관리를 시스템으로 줄입니다.</p>
         </div>
         <div className="footer-call">
