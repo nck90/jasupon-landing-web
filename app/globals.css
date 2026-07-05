@@ -97,9 +97,9 @@ section {
   display: flex;
   height: 100%;
   align-items: center;
-  gap: 38px;
+  gap: 30px;
   color: #111;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
   letter-spacing: -0.03em;
 }
@@ -1119,6 +1119,112 @@ section {
   background: #fff;
 }
 
+.section-race {
+  padding: 126px 0;
+  background:
+    radial-gradient(circle at 78% 22%, rgb(0 210 255 / 0.16), transparent 22%),
+    linear-gradient(135deg, #07104e 0%, #0045dc 56%, #02b8aa 100%);
+  color: #fff;
+}
+
+.race-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 440px) 1fr;
+  gap: 68px;
+  align-items: center;
+}
+
+.race-eyebrow {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: rgb(255 232 0 / 0.96);
+  color: #061166;
+  font-size: 16px;
+  font-weight: 950;
+}
+
+.section-race h2 {
+  margin: 24px 0 0;
+  font-size: 48px;
+  font-weight: 950;
+  line-height: 1.18;
+  letter-spacing: -0.065em;
+  word-break: keep-all;
+}
+
+.section-race p {
+  margin: 24px 0 0;
+  color: rgb(255 255 255 / 0.86);
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.68;
+  letter-spacing: -0.04em;
+  word-break: keep-all;
+}
+
+.race-board {
+  display: grid;
+  gap: 18px;
+  padding: 34px;
+  border-radius: 34px;
+  background: rgb(255 255 255 / 0.96);
+  box-shadow: 0 30px 70px rgb(0 0 0 / 0.24);
+}
+
+.race-row {
+  display: grid;
+  grid-template-columns: 46px 72px minmax(0, 1fr) 110px;
+  gap: 18px;
+  align-items: center;
+  min-height: 78px;
+  padding: 0 18px;
+  border-radius: 22px;
+  background: #f6fbff;
+}
+
+.race-row strong {
+  display: inline-grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 999px;
+  background: #005dff;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 950;
+}
+
+.race-row span {
+  color: #111827;
+  font-size: 19px;
+  font-weight: 950;
+}
+
+.race-row div {
+  height: 16px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #dbeafe;
+}
+
+.race-row i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #00d3c0, #005dff);
+}
+
+.race-row em {
+  color: #005dff;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 950;
+  text-align: right;
+}
+
 .pricing-table {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -1534,7 +1640,8 @@ section {
   .stat-row,
   .report-grid,
   .pricing-table,
-  .course-summary {
+  .course-summary,
+  .race-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1750,6 +1857,15 @@ section {
 
   .pricing-table article {
     min-height: 132px;
+  }
+
+  .race-row {
+    grid-template-columns: 40px 58px minmax(0, 1fr);
+  }
+
+  .race-row em {
+    grid-column: 3;
+    text-align: left;
   }
 
   .footer-grid {

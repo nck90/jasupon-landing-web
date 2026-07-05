@@ -25,6 +25,7 @@ const nav = [
   { label: "운영시스템", href: "#system" },
   { label: "기능소개", href: "#features" },
   { label: "리포트", href: "#report" },
+  { label: "레이스", href: "#race" },
   { label: "요금안내", href: "#pricing" },
   { label: "도입문의", href: "#contact" },
 ];
@@ -57,8 +58,8 @@ const systemSteps = [
   {
     no: "01",
     title: "출석 확인 자동화",
-    subtitle: "입실, 퇴실, 지각, 미입실 상태 확인",
-    body: "온 학생과 안 온 학생을 관리자 화면에서 바로 구분합니다.",
+    subtitle: "입실, 퇴실 시간이 분 단위로 기록",
+    body: "몇시 몇분에 들어오고 나갔는지 남아 온 학생과 안 온 학생을 바로 구분합니다.",
     image: "feature-attendance.png",
     href: "#attendance",
   },
@@ -81,8 +82,8 @@ const systemSteps = [
   {
     no: "04",
     title: "학부모 리포트",
-    subtitle: "출결, 공부시간, 누적 기록 공유",
-    body: "상담 전 바로 보여줄 수 있는 학생별 자습 리포트를 만듭니다.",
+    subtitle: "출결, 공부시간, 누적 기록 원클릭 공유",
+    body: "학생별 자습 리포트를 클릭 한 번으로 학부모에게 보낼 수 있습니다.",
     image: "feature-record-ranking-v2.png",
     href: "#report",
   },
@@ -112,13 +113,13 @@ const mathLevels = [
     title: "온 학생과 안 온 학생을 바로 구분합니다",
     variant: "plain",
     points: [
-      "입실·퇴실 상태 자동 기록",
+      "입실·퇴실 시간이 분 단위로 자동 기록",
       "지각·미입실 학생 빠른 확인",
       "관리 필요한 학생 누락 감소",
     ],
     slides: [],
     boxes: [],
-    desc: "입실, 퇴실, 지각, 미입실 상태가 기록되면 관리 필요한 학생을 놓치지 않습니다.",
+    desc: "입실, 퇴실, 지각, 미입실 상태와 시간이 함께 기록되면 관리 필요한 학생을 놓치지 않습니다.",
   },
   {
     id: "math2",
@@ -144,11 +145,11 @@ const mathLevels = [
     points: [
       "과목별 공부 타이머 기록",
       "학생별 누적 공부시간 확인",
-      "학부모에게 보낼 수 있는 리포트 생성",
+      "학부모에게 클릭 한 번으로 보낼 수 있는 리포트 생성",
     ],
     slides: [],
     boxes: [],
-    desc: "과목별 타이머와 누적 기록으로 목표 미달 학생과 성실한 학생을 구분하고, 학부모 상담에 쓸 리포트까지 만듭니다.",
+    desc: "과목별 타이머와 누적 기록으로 목표 미달 학생과 성실한 학생을 구분하고, 학부모에게 보낼 리포트까지 만듭니다.",
   },
   {
     id: "mathAdd",
@@ -177,7 +178,7 @@ const englishLevels = [
     points: [
       "입실·퇴실·결석 이력 확인",
       "학생별 공부시간 기록 축적",
-      "상담 전 바로 확인 가능한 관리 근거 확보",
+      "클릭 한 번으로 공유 가능한 리포트 확보",
     ],
     slides: [],
     boxes: [],
@@ -215,18 +216,18 @@ const englishLevels = [
   },
   {
     id: "enAdd",
-    label: "관리자 팁",
+    label: "레이스·보상",
     kicker: "랭킹과 보상도 사람이 매번 정리하지 않게",
-    title: "공부시간과 출석 데이터로 자동 운영합니다",
+    title: "공부 레이스가 자습 분위기를 만듭니다",
     variant: "plain",
     points: [
-      "공부시간 랭킹 기준 자동화",
-      "출석 챌린지와 쿠폰 대상자 관리",
-      "엑셀 정리 없이 보상 운영 기준 유지",
+      "공부시간 레이스와 랭킹 시각화",
+      "출석 챌린지와 쿠폰 대상자 자동 관리",
+      "보상 기준을 학생들이 바로 볼 수 있게 표시",
     ],
     slides: [],
     boxes: [],
-    desc: "랭킹, 챌린지, 쿠폰, 보상 대상자를 데이터 기준으로 관리해 이벤트 운영을 가볍게 만듭니다.",
+    desc: "공부시간 레이스, 랭킹, 챌린지, 보상 대상자를 시각적으로 보여줘 자습실 분위기를 끌어올립니다.",
   },
 ];
 
@@ -244,6 +245,7 @@ export default function Home() {
       <SystemSection />
       <CoursewareSection />
       <ReportSection />
+      <RaceSection />
       <PricingSection />
       <FinalCta />
       <Footer />
@@ -499,7 +501,8 @@ function CoursewareSection() {
         <h3>사람이 매번 확인하던 일을 시스템으로 분산합니다</h3>
         <div className="course-summary">
           <p>
-            학생 태블릿 앱으로 입실, 공부계획, 타이머, 퇴실을 직접 기록합니다
+            학생 태블릿 앱으로 입실 시간, 공부계획, 타이머, 퇴실 시간을 직접
+            기록합니다
           </p>
           <p>
             관리자 웹과 전자칠판이 출석, 좌석, 랭킹, 보상 현황을 자동으로
@@ -599,7 +602,7 @@ function ReportSection() {
           <article>
             <span>01</span>
             <strong>출결 리포트</strong>
-            <p>입실, 퇴실, 지각, 미입실 기록을 학생별로 확인합니다.</p>
+            <p>입실, 퇴실, 지각, 미입실 시간을 분 단위로 확인합니다.</p>
           </article>
           <article>
             <span>02</span>
@@ -608,9 +611,46 @@ function ReportSection() {
           </article>
           <article>
             <span>03</span>
-            <strong>관리 대상 확인</strong>
-            <p>목표 미달, 결석, 지각이 잦은 학생을 빠르게 구분합니다.</p>
+            <strong>원클릭 학부모 공유</strong>
+            <p>학생별 자습 리포트를 클릭 한 번으로 학부모에게 보냅니다.</p>
           </article>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function RaceSection() {
+  return (
+    <section className="section-race" id="race">
+      <div className="hb-wide race-grid">
+        <div>
+          <span className="race-eyebrow">레이스·랭킹</span>
+          <h2>
+            공부시간이 보이면
+            <br />
+            자습실 분위기가 달라집니다
+          </h2>
+          <p>
+            학생들이 지금 누가 앞서고 있는지 바로 볼 수 있도록 공부시간 레이스와
+            랭킹을 시각적으로 보여줍니다.
+          </p>
+        </div>
+        <div className="race-board" aria-label="공부시간 레이스 예시">
+          {[
+            { name: "민준", time: "3시간 42분", progress: "92%" },
+            { name: "서연", time: "3시간 18분", progress: "81%" },
+            { name: "지호", time: "2시간 54분", progress: "68%" },
+          ].map((student, index) => (
+            <div className="race-row" key={student.name}>
+              <strong>{index + 1}</strong>
+              <span>{student.name}</span>
+              <div>
+                <i style={{ width: student.progress }} />
+              </div>
+              <em>{student.time}</em>
+            </div>
+          ))}
         </div>
       </div>
     </section>
