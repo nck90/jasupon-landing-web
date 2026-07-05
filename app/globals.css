@@ -203,6 +203,7 @@ section {
   top: 34px;
   width: min(720px, 58vw);
   border-radius: 34px;
+  animation: none;
   filter: drop-shadow(0 34px 42px rgb(0 0 0 / 0.24));
 }
 
@@ -1379,8 +1380,8 @@ section {
   right: 24px;
   top: 20px;
   display: inline-flex;
-  width: 42px;
-  height: 42px;
+  width: 46px;
+  height: 46px;
   align-items: center;
   justify-content: center;
   border-radius: 999px;
@@ -1612,14 +1613,26 @@ section {
   .hero-images .studyon-hero-mockup {
     left: 50%;
     right: auto;
-    width: min(760px, 96vw);
+    width: min(720px, 90vw);
     transform: translateX(-50%);
   }
 
   .phone-composition {
-    transform: scale(0.82);
-    transform-origin: center top;
-    margin-bottom: -90px;
+    height: auto;
+    display: grid;
+    gap: 20px;
+    margin-bottom: 0;
+    transform: none;
+  }
+
+  .phone-composition img,
+  .phone-composition .phone,
+  .phone-composition .step,
+  .phone-composition .like,
+  .phone-composition .line {
+    position: static;
+    width: min(620px, 100%);
+    margin-inline: auto;
   }
 
   .studyon-teacher-mockups {
@@ -1698,7 +1711,7 @@ section {
 
   .hero-images .studyon-hero-mockup {
     top: 32px;
-    width: min(580px, 108vw);
+    width: min(360px, 92vw);
   }
 
   .hero-images .folder {
