@@ -24,6 +24,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 92px;
 }
 
 body {
@@ -46,6 +47,10 @@ button {
 img {
   display: block;
   max-width: 100%;
+}
+
+section {
+  scroll-margin-top: 92px;
 }
 
 .smarthb-long {
@@ -92,7 +97,7 @@ img {
   display: flex;
   height: 100%;
   align-items: center;
-  gap: 68px;
+  gap: 54px;
   color: #111;
   font-size: 19px;
   font-weight: 700;
@@ -408,7 +413,7 @@ img {
 }
 
 .section-teacher-intro {
-  min-height: 1650px;
+  min-height: 880px;
   background: linear-gradient(180deg, #fff 0%, #f5fbff 55%, #fff 100%);
 }
 
@@ -618,14 +623,42 @@ img {
 .system-tabs {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0;
+  gap: 12px;
   margin-top: 60px;
   overflow: hidden;
   border-radius: 24px;
 }
 
-.system-tabs img {
-  width: 100%;
+.system-tabs a {
+  display: grid;
+  min-height: 78px;
+  align-content: center;
+  gap: 6px;
+  padding: 16px 20px;
+  border-radius: 999px;
+  background: #071271;
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12);
+}
+
+.system-tabs a:nth-child(odd) {
+  background: linear-gradient(135deg, #005dff, #071271);
+}
+
+.system-tabs a:hover {
+  background: linear-gradient(135deg, #00bdd6, #005dff);
+}
+
+.system-tabs span {
+  color: #76f3ff;
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.system-tabs strong {
+  font-size: 18px;
+  font-weight: 950;
+  letter-spacing: -0.05em;
 }
 
 .system-step-grid {

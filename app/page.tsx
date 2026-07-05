@@ -5,7 +5,24 @@ const gen = (name: string) => `/studyon-generated/${name}`;
 const asset = (name: string) =>
   name.startsWith("feature-") || name.startsWith("hero-") || name.startsWith("workflow-") ? gen(name) : img(name);
 
-const nav = ["자습ON", "운영시스템", "기능소개", "도입문의", "활용사례", "공지사항"];
+const levelAnchor = (id: string) => {
+  const anchors: Record<string, string> = {
+    math1: "attendance",
+    math2: "seats",
+    math3: "reports",
+    enAdd: "rewards",
+  };
+
+  return anchors[id];
+};
+
+const nav = [
+  { label: "자습ON", href: "#hero" },
+  { label: "운영시스템", href: "#system" },
+  { label: "기능소개", href: "#features" },
+  { label: "도입문의", href: "#contact" },
+  { label: "활용사례", href: "#case" },
+];
 
 const techStats = [
   {
@@ -204,13 +221,13 @@ function Header() {
   return (
     <header className="hb-header">
       <div className="hb-wide hb-header-inner">
-        <a className="hb-logo-img" href="#">
+        <a className="hb-logo-img" href="#hero">
           <img src="/studyon-assets/jasupon_wordmark.png" alt="자습ON" />
         </a>
         <nav>
           {nav.map((item) => (
-            <a className={item === "자습ON" ? "active" : ""} href="#" key={item}>
-              {item}
+            <a className={item.label === "자습ON" ? "active" : ""} href={item.href} key={item.label}>
+              {item.label}
             </a>
           ))}
         </nav>
@@ -221,7 +238,7 @@ function Header() {
 
 function Hero() {
   return (
-    <section className="section-hero">
+    <section className="section-hero" id="hero">
       <div className="hb-wide hero-layout">
         <div className="hero-copy">
           <p>자습실, 아직도 사람이 직접 관리하고 있나요?</p>
@@ -243,7 +260,7 @@ function Hero() {
 
 function DataSection() {
   return (
-    <section className="section-data long-section">
+    <section className="section-data long-section" id="problem">
       <div className="hb-wide">
           <TitleBlock eyebrow="메인 문제" title={<>자습실은 있는데,<br />관리하려면 사람이 필요합니다</>} />
         <div className="phone-composition">
@@ -269,7 +286,7 @@ function DataSection() {
 
 function TeacherIntro() {
   return (
-    <section className="section-teacher-intro long-section">
+    <section className="section-teacher-intro long-section" id="operation">
       <div className="hb-wide teacher-intro-grid">
         <div>
           <TitleBlock eyebrow="숨은 비용" title={<>자습실 관리에는<br />보이지 않는 인건비가 들어갑니다</>} align="left" />
@@ -332,12 +349,15 @@ function LineBanner({ children, theme }: { children: React.ReactNode; theme: "bl
 
 function SystemSection() {
   return (
-    <section className="section-system-detail long-section">
+    <section className="section-system-detail long-section" id="system">
       <div className="hb-wide">
         <TitleBlock title={<>학생이 직접 기록하고,<br />관리자는 한 화면에서 확인합니다</>} />
         <div className="system-tabs">
           {systemSteps.map((step) => (
-            <img src={img(step.tab)} alt="" key={step.tab} />
+            <a href={`#${step.no === "01" ? "attendance" : step.no === "02" ? "seats" : step.no === "03" ? "reports" : "rewards"}`} key={step.no}>
+              <span>STEP {step.no}</span>
+              <strong>{step.title}</strong>
+            </a>
           ))}
         </div>
         <div className="system-step-grid">
@@ -360,7 +380,7 @@ function SystemSection() {
 
 function CoursewareSection() {
   return (
-    <section className="section-courseware">
+    <section className="section-courseware" id="features">
       <div className="hb-wide course-head">
         <TitleBlock
           eyebrow="해결 구조"
@@ -389,7 +409,10 @@ function LevelSection({
   const isPlain = "variant" in level && level.variant === "plain";
 
   return (
-    <section className={`level-section ${level.id.includes("en") ? "english" : "math"} ${isPlain ? "plain" : ""}`}>
+    <section
+      className={`level-section ${level.id.includes("en") ? "english" : "math"} ${isPlain ? "plain" : ""}`}
+      id={levelAnchor(level.id)}
+    >
       <div className="hb-wide">
         <div className="level-title">
           <strong className="level-badge">자습ON</strong>
@@ -461,7 +484,7 @@ function TeacherDetail() {
 
 function ReviewSection() {
   return (
-    <section className="section-review">
+    <section className="section-review" id="case">
       <div className="hb-wide">
         <img src={img("sec8_top.png")} alt="" />
         <h2>
@@ -485,7 +508,7 @@ function ReviewSection() {
 
 function FinalCta() {
   return (
-    <section className="section-final">
+    <section className="section-final" id="contact">
       <div className="hb-wide final-grid">
         <div>
           <h2>
