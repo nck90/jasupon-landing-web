@@ -22,27 +22,27 @@
 - 경로: `studyon_client/apps/studyon_client`
 - 역할: iPad 학생용 앱
 - 운영 API 연결값 필요:
-  - `API_BASE_URL=https://운영-api-domain`
+  - `API_BASE_URL=https://jasupon-api.hyphen.it.com`
 
 ### 3. Admin Web
 - 경로: `studyon_client/apps/admin_web`
 - 역할: 관리자/원장 웹
 - 운영 API 연결값 필요:
-  - `API_URL=https://운영-api-domain`
+  - `API_URL=https://jasupon-api.hyphen.it.com`
 
 ### 4. TV Display Web
 - 경로: `studyon_client/apps/tv_display_web`
 - 역할: 전자칠판 랭킹 화면
 - 운영 API 연결값 필요:
-  - `API_URL=https://운영-api-domain`
+  - `API_URL=https://jasupon-api.hyphen.it.com`
 
 ## 서버 운영 환경 변수
 
 ```env
 NODE_ENV=production
 PORT=3000
-APP_NAME=STUDYON API
-APP_URL=https://운영-api-domain
+APP_NAME=JASUPON API
+APP_URL=https://jasupon-api.hyphen.it.com
 CORS_ORIGIN=https://관리자웹도메인,https://전자칠판웹도메인
 
 DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/studyon?schema=public
@@ -70,7 +70,7 @@ pnpm start:prod
 배포 후 확인:
 
 ```bash
-curl https://운영-api-domain/api/v1/health
+curl https://jasupon-api.hyphen.it.com/api/v1/health
 ```
 
 정상 응답이 나오면 API 서버는 기동된 상태입니다.
@@ -80,7 +80,7 @@ curl https://운영-api-domain/api/v1/health
 ```bash
 cd studyon_client/apps/admin_web
 npm install
-API_URL=https://운영-api-domain npm run build
+API_URL=https://jasupon-api.hyphen.it.com npm run build
 npm run start
 ```
 
@@ -97,7 +97,7 @@ npm run start
 ```bash
 cd studyon_client/apps/tv_display_web
 npm install
-API_URL=https://운영-api-domain npm run build
+API_URL=https://jasupon-api.hyphen.it.com npm run build
 npm run start
 ```
 
@@ -113,7 +113,7 @@ npm run start
 cd studyon_client/apps/studyon_client
 flutter pub get
 flutter build ios --release --no-codesign \
-  --dart-define=API_BASE_URL=https://운영-api-domain \
+  --dart-define=API_BASE_URL=https://jasupon-api.hyphen.it.com \
   --dart-define=APP_ENV=prod \
   --dart-define=ENABLE_LOGGING=false \
   --dart-define=DEVICE_CODE=studyon_client_release
@@ -123,7 +123,7 @@ flutter build ios --release --no-codesign \
 
 ```bash
 flutter run \
-  --dart-define=API_BASE_URL=https://운영-api-domain \
+  --dart-define=API_BASE_URL=https://jasupon-api.hyphen.it.com \
   --dart-define=APP_ENV=prod \
   --dart-define=ENABLE_LOGGING=true \
   --dart-define=DEVICE_CODE=qa-ipad-01

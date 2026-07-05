@@ -4,14 +4,14 @@
 
 ## 필요값
 
-- `API_URL=https://운영-api-domain`
+- `API_URL=https://jasupon-api.hyphen.it.com`
 - 참고 파일: `.env.production.example`
 
 ## 배포 순서
 
 ```bash
 npm install
-API_URL=https://운영-api-domain npm run build
+API_URL=https://jasupon-api.hyphen.it.com npm run build
 npm run start
 ```
 

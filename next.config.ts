@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   output: "standalone",
   async rewrites() {
     const apiUrl =
-      process.env.API_URL ?? "https://studyon-server.hyphen.it.com";
+      process.env.API_URL ?? "https://jasupon-api.hyphen.it.com";
     return [
       {
         source: "/api/:path*",
