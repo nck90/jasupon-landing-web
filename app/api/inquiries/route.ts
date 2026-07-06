@@ -69,6 +69,7 @@ export async function POST(request: NextRequest) {
   if (!supabaseResponse.ok) {
     const detail = await supabaseResponse.text();
     const tableMissing = detail.includes("PGRST205") || detail.includes("landing_inquiries");
+    let savedToFallback = false;
 
     if (tableMissing && requiredEnv.fallbackFormId) {
       const fallbackResponse = await fetch(`${requiredEnv.supabaseUrl}/rest/v1/form_responses`, {
@@ -96,15 +97,17 @@ export async function POST(request: NextRequest) {
       });
 
       if (fallbackResponse.ok) {
-        return NextResponse.json({ ok: true });
+        savedToFallback = true;
+      } else {
+        console.error("Supabase fallback inquiry insert failed", await fallbackResponse.text());
       }
-
-      console.error("Supabase fallback inquiry insert failed", await fallbackResponse.text());
     } else {
       console.error("Supabase inquiry insert failed", detail);
     }
 
-    return NextResponse.json({ message: "Failed to save inquiry" }, { status: 502 });
+    if (!savedToFallback) {
+      return NextResponse.json({ message: "Failed to save inquiry" }, { status: 502 });
+    }
   }
 
   if (requiredEnv.discordWebhookUrl) {
